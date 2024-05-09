@@ -1,5 +1,11 @@
 package global
 
-import "gorm.io/gorm"
+import (
+	"github.com/provider-go/pkg/cache"
+	"gorm.io/gorm"
+)
 
-var DB *gorm.DB
+var (
+	DB    *gorm.DB
+	Cache cache.Cache
+)

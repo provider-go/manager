@@ -66,3 +66,11 @@ func ViewManagerUserByUsername(username string) (*ManagerUser, error) {
 	}
 	return row, nil
 }
+
+func ViewManagerUserByPhone(phone string) (*ManagerUser, error) {
+	row := new(ManagerUser)
+	if err := global.DB.Table("manager_users").Where("phone = ?", phone).First(&row).Error; err != nil {
+		return nil, err
+	}
+	return row, nil
+}

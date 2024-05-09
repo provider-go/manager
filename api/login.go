@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/provider-go/manager/global"
 	"github.com/provider-go/manager/models"
 	"github.com/provider-go/pkg/encryption/sm3"
 	"github.com/provider-go/pkg/logger"
@@ -31,5 +32,26 @@ func LoginByUsername(ctx *gin.Context) {
 }
 
 func LoginByPhone(ctx *gin.Context) {
+	json := make(map[string]interface{})
+	_ = ctx.BindJSON(&json)
+	phone := output.ParamToString(json["phone"])
+	code := output.ParamToString(json["code"])
 
+	// 对比数据库记录,手机号是否存在
+	item, err := models.ViewManagerUserByPhone(phone)
+	if err != nil {
+		logger.Error("LoginByUsername", "step", "ViewManagerUserByUsername", "err", err)
+		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
+	}
+	if len(item.Username) < 2 {
+		output.ReturnErrorResponse(ctx, 9999, "用户不存在~")
+	}
+	// 对比缓存种是否存在手机号验证码
+	value := global.Cache.Get(phone)
+	if code != value {
+		output.ReturnErrorResponse(ctx, 9999, "短信验证码错误~")
+	}
+	// 删除缓存记录
+	global.Cache.Del(phone)
+	output.ReturnSuccessResponse(ctx, nil)
 }
