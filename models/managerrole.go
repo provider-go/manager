@@ -16,8 +16,8 @@ type ManagerRole struct {
 	UpdateTime  time.Time `json:"update_time" gorm:"autoCreateTime;comment:更新时间"`
 }
 
-func CreateManagerRole(code, name, description string, sequence int) error {
-	return global.DB.Table("manager_roles").Create(&ManagerRole{Code: code, Name: name, Description: description, Sequence: sequence}).Error
+func CreateManagerRole(code, name, description string) error {
+	return global.DB.Table("manager_roles").Create(&ManagerRole{Code: code, Name: name, Description: description}).Error
 }
 
 func DeleteManagerRole(id int32) error {

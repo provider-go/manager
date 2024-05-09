@@ -13,8 +13,7 @@ func CreateRole(ctx *gin.Context) {
 	code := output.ParamToString(json["code"])
 	name := output.ParamToString(json["name"])
 	description := output.ParamToString(json["description"])
-	sequence := output.ParamToInt(json["sequence"])
-	err := models.CreateManagerRole(code, name, description, sequence)
+	err := models.CreateManagerRole(code, name, description)
 	if err != nil {
 		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
 	} else {
@@ -38,9 +37,7 @@ func UpdateRole(ctx *gin.Context) {
 	}
 }
 func DeleteRole(ctx *gin.Context) {
-	json := make(map[string]interface{})
-	_ = ctx.BindJSON(&json)
-	id := output.ParamToInt32(json["id"])
+	id := output.ParamToInt32(ctx.Query("id"))
 	err := models.DeleteManagerRole(id)
 	if err != nil {
 		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
@@ -49,10 +46,9 @@ func DeleteRole(ctx *gin.Context) {
 	}
 }
 func ListRole(ctx *gin.Context) {
-	json := make(map[string]interface{})
-	_ = ctx.BindJSON(&json)
-	pageSize := output.ParamToInt(json["pageSize"])
-	pageNum := output.ParamToInt(json["pageNum"])
+	pageSize := output.ParamToInt(ctx.Query("pageSize"))
+	pageNum := output.ParamToInt(ctx.Query("pageNum"))
+
 	list, total, err := models.ListManagerRole(pageSize, pageNum)
 
 	if err != nil {
@@ -66,9 +62,7 @@ func ListRole(ctx *gin.Context) {
 
 }
 func ViewRole(ctx *gin.Context) {
-	json := make(map[string]interface{})
-	_ = ctx.BindJSON(&json)
-	id := output.ParamToInt32(json["id"])
+	id := output.ParamToInt32(ctx.Query("id"))
 	row, err := models.ViewManagerRole(id)
 	if err != nil {
 		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
