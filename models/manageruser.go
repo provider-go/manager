@@ -11,16 +11,15 @@ type ManagerUser struct {
 	Name       string    `json:"name" gorm:"column:name;type:varchar(20);not null;default:'';comment:用户名称"`
 	Password   string    `json:"password" gorm:"column:password;type:varchar(64);not null;default:'';comment:登录密码（加密）"`
 	Phone      string    `json:"phone" gorm:"column:phone;type:varchar(20);not null;default:'';comment:用户电话号码"`
-	Email      string    `json:"email" gorm:"column:email;type:varchar(100);not null;comment:用户的电子邮件"`
 	Remark     string    `json:"remark" gorm:"column:remark;type:varchar(255);not null;comment:用户备注"`
-	Status     string    `json:"status" gorm:"column:status;type:varchar(20);not null;default:'activated';comment:用户状态（activated, freezed）"`
+	Status     int       `json:"status" gorm:"column:status;type:tinyint(1);not null;default:0;comment:用户状态:0(正常)1(禁用)"`
 	CreateTime time.Time `json:"create_time" gorm:"autoCreateTime;comment:创建时间"`
 	UpdateTime time.Time `json:"update_time" gorm:"autoCreateTime;comment:更新时间"`
 }
 
-func CreateManagerUser(username, name, password, phone, email, remark, status string) error {
-	return global.DB.Table("manager_users").Select("username", "name", "password", "phone", "email", "remark", "status").
-		Create(&ManagerUser{Username: username, Name: name, Password: password, Phone: phone, Email: email, Remark: remark, Status: status}).Error
+func CreateManagerUser(username, name, password, phone, remark string, status int) error {
+	return global.DB.Table("manager_users").Select("username", "name", "password", "phone", "remark", "status").
+		Create(&ManagerUser{Username: username, Name: name, Password: password, Phone: phone, Remark: remark, Status: status}).Error
 }
 
 func DeleteManagerUser(id int32) error {
@@ -33,7 +32,6 @@ func UpdateManagerUser(id int32, username, name, password, phone, email, remark,
 		"name":     name,
 		"password": password,
 		"phone":    phone,
-		"email":    email,
 		"remark":   remark,
 		"status":   status,
 	}).Error

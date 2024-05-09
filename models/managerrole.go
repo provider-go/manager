@@ -11,21 +11,20 @@ type ManagerRole struct {
 	Name        string    `json:"name" gorm:"column:name;type:varchar(200);not null;default:'';comment:角色名称"`
 	Description string    `json:"description" gorm:"column:description;type:varchar(255);not null;comment:角色描述"`
 	Sequence    int       `json:"sequence" gorm:"column:sequence;type:tinyint(1);not null;default:0;comment:排序顺序（按desc排序）"`
-	Status      string    `json:"status" gorm:"column:status;type:varchar(10);not null;default:'';comment:菜单状态(enabled, disabled)"`
+	Status      int       `json:"status" gorm:"column:status;type:tinyint(1);not null;default:0;comment:菜单状态:0(正常)1(禁用)"`
 	CreateTime  time.Time `json:"create_time" gorm:"autoCreateTime;comment:创建时间"`
 	UpdateTime  time.Time `json:"update_time" gorm:"autoCreateTime;comment:更新时间"`
 }
 
-func CreateManagerRole(code, name, description string, sequence int, status string) error {
-	return global.DB.Table("manager_roles").Select("code", "name", "description", "sequence", "status").
-		Create(&ManagerRole{Code: code, Name: name, Description: description, Sequence: sequence, Status: status}).Error
+func CreateManagerRole(code, name, description string, sequence int) error {
+	return global.DB.Table("manager_roles").Create(&ManagerRole{Code: code, Name: name, Description: description, Sequence: sequence}).Error
 }
 
 func DeleteManagerRole(id int32) error {
 	return global.DB.Table("manager_roles").Where("id = ?", id).Delete(&ManagerRole{}).Error
 }
 
-func UpdateManagerRole(id int32, code, name, description string, sequence int, menuType, path, properties, status, parentId, parentPath string) error {
+func UpdateManagerRole(id int32, code, name, description string, sequence, status int) error {
 	return global.DB.Table("manager_roles").Where("id = ?", id).Updates(map[string]interface{}{
 		"code":        code,
 		"name":        name,
