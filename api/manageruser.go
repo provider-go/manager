@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/provider-go/manager/models"
+	"github.com/provider-go/pkg/encryption/sm3"
 	"github.com/provider-go/pkg/output"
 )
 
@@ -13,9 +14,12 @@ func CreateUser(ctx *gin.Context) {
 	username := output.ParamToString(json["username"])
 	name := output.ParamToString(json["name"])
 	password := output.ParamToString(json["password"])
+	// 对password进行双hash
+	ripemd := sm3.NewSMThree("ripemd160")
+	passwordHash := ripemd.Hash([]byte(password))
 	phone := output.ParamToString(json["phone"])
 	remark := output.ParamToString(json["remark"])
-	err := models.CreateManagerUser(username, name, password, phone, remark)
+	err := models.CreateManagerUser(username, name, passwordHash, phone, remark)
 	if err != nil {
 		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
 	} else {
