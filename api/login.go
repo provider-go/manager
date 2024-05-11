@@ -22,12 +22,16 @@ func LoginByUsername(ctx *gin.Context) {
 	if err != nil {
 		logger.Error("LoginByUsername", "step", "ViewManagerUserByUsername", "err", err)
 		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
+		return
 	}
 	if len(item.Password) < 20 {
 		output.ReturnErrorResponse(ctx, 9999, "用户不存在~")
+		return
 	}
 	if item.Password == passwordHash {
 		output.ReturnSuccessResponse(ctx, nil)
+	} else {
+		output.ReturnErrorResponse(ctx, 9999, "用户或密码不正确~")
 	}
 }
 
@@ -42,14 +46,17 @@ func LoginByPhone(ctx *gin.Context) {
 	if err != nil {
 		logger.Error("LoginByUsername", "step", "ViewManagerUserByUsername", "err", err)
 		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
+		return
 	}
 	if len(item.Username) < 2 {
 		output.ReturnErrorResponse(ctx, 9999, "用户不存在~")
+		return
 	}
 	// 对比缓存种是否存在手机号验证码
 	value := global.Cache.Get(phone)
 	if code != value {
 		output.ReturnErrorResponse(ctx, 9999, "短信验证码错误~")
+		return
 	}
 	// 删除缓存记录
 	global.Cache.Del(phone)
