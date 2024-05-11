@@ -17,16 +17,16 @@ type ManagerUser struct {
 	UpdateTime time.Time `json:"update_time" gorm:"autoCreateTime;comment:更新时间"`
 }
 
-func CreateManagerUser(username, name, password, phone, remark string, status int) error {
-	return global.DB.Table("manager_users").Select("username", "name", "password", "phone", "remark", "status").
-		Create(&ManagerUser{Username: username, Name: name, Password: password, Phone: phone, Remark: remark, Status: status}).Error
+func CreateManagerUser(username, name, password, phone, remark string) error {
+	return global.DB.Table("manager_users").
+		Create(&ManagerUser{Username: username, Name: name, Password: password, Phone: phone, Remark: remark}).Error
 }
 
 func DeleteManagerUser(id int32) error {
 	return global.DB.Table("manager_users").Where("id = ?", id).Delete(&ManagerUser{}).Error
 }
 
-func UpdateManagerUser(id int32, username, name, password, phone, email, remark, status string) error {
+func UpdateManagerUser(id int32, username, name, password, phone, remark, status string) error {
 	return global.DB.Table("manager_users").Where("id = ?", id).Updates(map[string]interface{}{
 		"username": username,
 		"name":     name,

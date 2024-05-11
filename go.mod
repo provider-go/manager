@@ -6,7 +6,7 @@ toolchain go1.22.2
 
 require (
 	github.com/gin-gonic/gin v1.9.1
-	github.com/provider-go/pkg v0.2.7
+	github.com/provider-go/pkg v0.2.8
 	gorm.io/driver/mysql v1.5.6
 	gorm.io/gorm v1.25.10
 )

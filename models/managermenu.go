@@ -23,11 +23,10 @@ type ManagerMenu struct {
 	Resources   ManagerMenuResource `json:"resources" gorm:"-"` // 菜单资源
 }
 
-func CreateManagerMenu(code, name, description string, sequence int, menuType, path, properties, status, parentId, parentPath string) error {
-	return global.DB.Table("manager_menus").Select("code", "name", "description", "sequence", "type", "path",
-		"properties", "status", "parent_id", "parent_path").
-		Create(&ManagerMenu{Code: code, Name: name, Description: description, Sequence: sequence, Type: menuType, Path: path, Properties: properties,
-			Status: status, ParentID: parentId, ParentPath: parentPath}).Error
+func CreateManagerMenu(code, name, description, menuType, path, properties, parentId, parentPath string) error {
+	return global.DB.Table("manager_menus").
+		Create(&ManagerMenu{Code: code, Name: name, Description: description, Type: menuType, Path: path, Properties: properties,
+			ParentID: parentId, ParentPath: parentPath}).Error
 }
 
 func DeleteManagerMenu(id int32) error {
