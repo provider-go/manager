@@ -31,7 +31,7 @@ func LoginByUsername(ctx *gin.Context) {
 	}
 	if item.Password == passwordHash {
 		// 生成token
-		token := middleware.InitJwt(global.SecretKey).CreateTokenByOldToken(username)
+		token := middleware.InitJwt(global.SecretKey).GenerateToken(username)
 		output.ReturnSuccessResponse(ctx, token)
 	} else {
 		output.ReturnErrorResponse(ctx, 9999, "用户或密码不正确~")
@@ -64,6 +64,6 @@ func LoginByPhone(ctx *gin.Context) {
 	// 删除缓存记录
 	global.Cache.Del(phone)
 	// 生成token
-	token := middleware.InitJwt(global.SecretKey).CreateTokenByOldToken(item.Username)
+	token := middleware.InitJwt(global.SecretKey).GenerateToken(item.Username)
 	output.ReturnSuccessResponse(ctx, token)
 }
