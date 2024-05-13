@@ -85,12 +85,14 @@ func CasbinAuth() gin.HandlerFunc {
 		if token == "" {
 			output.ReturnErrorResponse(ctx, 9999, "token不存在~")
 			ctx.Abort()
+			return
 		}
 		claims := InitJwt(global.SecretKey).ParseToken(token)
 		user, err := claims.GetSubject()
 		if err != nil {
 			output.ReturnErrorResponse(ctx, 9999, "token已失效~")
 			ctx.Abort()
+			return
 		}
 		// 获取用户申请的资源和方法
 		method := ctx.Request.Method
@@ -100,6 +102,7 @@ func CasbinAuth() gin.HandlerFunc {
 		if ok, _ := global.Casbin.Enforce(user, path, method); !ok {
 			output.ReturnErrorResponse(ctx, 9999, "用户无权限~")
 			ctx.Abort()
+			return
 		}
 	}
 }
