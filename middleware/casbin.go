@@ -98,6 +98,8 @@ func CasbinAuth() gin.HandlerFunc {
 		method := ctx.Request.Method
 		path := ctx.Request.URL.Path
 
+		logger.Info("CasbinAuth", "user", user, "path", path, "method", method)
+
 		// 使用casbin提供的函数进行权限验证
 		if ok, _ := global.Casbin.Enforce(user, path, method); !ok {
 			output.ReturnErrorResponse(ctx, 9999, "用户无权限~")
