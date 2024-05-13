@@ -3,6 +3,7 @@ package manager
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/provider-go/manager/global"
+	"github.com/provider-go/manager/middleware"
 	"github.com/provider-go/manager/router"
 	"github.com/provider-go/pkg/types"
 )
@@ -16,6 +17,8 @@ func CreatePlugin() *Plugin {
 func CreatePluginAndDB(instance types.PluginNeedInstance) *Plugin {
 	global.DB = instance.Mysql
 	global.Cache = instance.Cache
+	middleware.InstanceCasbin(global.DB)
+	global.JWT = middleware.InitJwt([]byte("SecretKey"))
 	return &Plugin{}
 }
 
