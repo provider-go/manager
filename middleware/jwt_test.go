@@ -6,7 +6,7 @@ import (
 )
 
 func TestJwt(t *testing.T) {
-	jwt := InitJwt([]byte("SecretKey"))
+	jwt := InitJwt("SecretKey")
 	token := jwt.GenerateToken("qiqi") // 生成有效期为24小时的 JWT
 	t.Log(token)
 

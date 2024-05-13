@@ -10,8 +10,8 @@ type InstanceJWT struct {
 	SecretKey []byte
 }
 
-func InitJwt(SecretKey []byte) InstanceJWT {
-	return InstanceJWT{SecretKey}
+func InitJwt(SecretKey string) InstanceJWT {
+	return InstanceJWT{[]byte(SecretKey)}
 }
 
 // CreateClaims
