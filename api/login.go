@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/provider-go/manager/global"
+	"github.com/provider-go/manager/middleware"
 	"github.com/provider-go/manager/models"
 	"github.com/provider-go/pkg/encryption/sm3"
 	"github.com/provider-go/pkg/logger"
@@ -29,7 +30,9 @@ func LoginByUsername(ctx *gin.Context) {
 		return
 	}
 	if item.Password == passwordHash {
-		output.ReturnSuccessResponse(ctx, nil)
+		// 生成token
+		token := middleware.InitJwt(global.SecretKey).CreateTokenByOldToken(username)
+		output.ReturnSuccessResponse(ctx, token)
 	} else {
 		output.ReturnErrorResponse(ctx, 9999, "用户或密码不正确~")
 	}
@@ -60,5 +63,7 @@ func LoginByPhone(ctx *gin.Context) {
 	}
 	// 删除缓存记录
 	global.Cache.Del(phone)
-	output.ReturnSuccessResponse(ctx, nil)
+	// 生成token
+	token := middleware.InitJwt(global.SecretKey).CreateTokenByOldToken(item.Username)
+	output.ReturnSuccessResponse(ctx, token)
 }
