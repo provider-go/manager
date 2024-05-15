@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/provider-go/manager/models"
 	"github.com/provider-go/pkg/encryption/sm3"
+	"github.com/provider-go/pkg/logger"
 	"github.com/provider-go/pkg/output"
 	"github.com/provider-go/pkg/util"
 )
@@ -59,11 +60,43 @@ func ResetPassword(ctx *gin.Context) {
 	// 对password进行双hash
 	ripemd := sm3.NewSMThree("ripemd160")
 	passwordHash := ripemd.Hash([]byte(password))
-	err := models.ResetPasswordManagerUser(id, passwordHash)
+	err := models.UpdatePasswordManagerUser(id, passwordHash)
 	if err != nil {
 		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
 	} else {
 		output.ReturnSuccessResponse(ctx, password)
+	}
+
+}
+
+func ModifyPassword(ctx *gin.Context) {
+	json := make(map[string]interface{})
+	_ = ctx.BindJSON(&json)
+	id := output.ParamToInt32(json["id"])
+	newPassword := output.ParamToString(json["newPassword"])
+	oldPassword := output.ParamToString(json["oldPassword"])
+	// 对password进行双hash
+	ripemd := sm3.NewSMThree("ripemd160")
+	newPasswordHash := ripemd.Hash([]byte(newPassword))
+	ripemd = sm3.NewSMThree("ripemd160")
+	oldPasswordHash := ripemd.Hash([]byte(oldPassword))
+	// 查询旧密码是否匹配
+	item, err := models.ViewManagerUserById(id)
+	if err != nil {
+		logger.Error("ModifyPassword", "step", "ViewManagerUserById", "err", err)
+		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
+		return
+	}
+	if item.Password != oldPasswordHash {
+		output.ReturnErrorResponse(ctx, 9999, "旧密码不匹配~")
+		return
+	}
+
+	err = models.UpdatePasswordManagerUser(id, newPasswordHash)
+	if err != nil {
+		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
+	} else {
+		output.ReturnSuccessResponse(ctx, "success")
 	}
 
 }

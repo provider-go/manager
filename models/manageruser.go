@@ -37,7 +37,7 @@ func UpdateManagerUser(id int32, username, name, password, phone, remark, status
 	}).Error
 }
 
-func ResetPasswordManagerUser(id int32, password string) error {
+func UpdatePasswordManagerUser(id int32, password string) error {
 	return global.DB.Table("manager_users").Where("id = ?", id).Updates(map[string]interface{}{
 		"password": password,
 	}).Error
