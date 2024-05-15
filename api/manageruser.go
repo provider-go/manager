@@ -5,6 +5,7 @@ import (
 	"github.com/provider-go/manager/models"
 	"github.com/provider-go/pkg/encryption/sm3"
 	"github.com/provider-go/pkg/output"
+	"github.com/provider-go/pkg/util"
 )
 
 func CreateUser(ctx *gin.Context) {
@@ -34,14 +35,35 @@ func UpdateUser(ctx *gin.Context) {
 	username := output.ParamToString(json["username"])
 	name := output.ParamToString(json["name"])
 	password := output.ParamToString(json["password"])
+	// 对password进行双hash
+	ripemd := sm3.NewSMThree("ripemd160")
+	passwordHash := ripemd.Hash([]byte(password))
 	phone := output.ParamToString(json["phone"])
 	remark := output.ParamToString(json["remark"])
 	status := output.ParamToString(json["status"])
-	err := models.UpdateManagerUser(id, username, name, password, phone, remark, status)
+	err := models.UpdateManagerUser(id, username, name, passwordHash, phone, remark, status)
 	if err != nil {
 		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
 	} else {
 		output.ReturnSuccessResponse(ctx, "success")
+	}
+
+}
+
+func ResetPassword(ctx *gin.Context) {
+	json := make(map[string]interface{})
+	_ = ctx.BindJSON(&json)
+	id := output.ParamToInt32(json["id"])
+	// 生成10位随机密码
+	password := util.GetRandString(10)
+	// 对password进行双hash
+	ripemd := sm3.NewSMThree("ripemd160")
+	passwordHash := ripemd.Hash([]byte(password))
+	err := models.ResetPasswordManagerUser(id, passwordHash)
+	if err != nil {
+		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
+	} else {
+		output.ReturnSuccessResponse(ctx, password)
 	}
 
 }

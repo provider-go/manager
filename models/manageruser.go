@@ -37,6 +37,12 @@ func UpdateManagerUser(id int32, username, name, password, phone, remark, status
 	}).Error
 }
 
+func ResetPasswordManagerUser(id int32, password string) error {
+	return global.DB.Table("manager_users").Where("id = ?", id).Updates(map[string]interface{}{
+		"password": password,
+	}).Error
+}
+
 func ListManagerUser(pageSize, pageNum int) ([]*ManagerUser, int64, error) {
 	var rows []*ManagerUser
 	//计算列表数量

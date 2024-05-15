@@ -41,6 +41,7 @@ func (s *Router) InitRouter(Router *gin.RouterGroup) {
 			HomeRouter.GET("current/user", api.CurrentUser)
 			HomeRouter.POST("user", api.CreateUser)
 			HomeRouter.PUT("user", api.UpdateUser)
+			HomeRouter.PUT("user/resetPassword", api.ResetPassword)
 			HomeRouter.DELETE("user", api.DeleteUser)
 			HomeRouter.GET("users", api.ListUser)
 			HomeRouter.GET("user", api.ViewUser)
