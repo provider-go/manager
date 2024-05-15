@@ -95,6 +95,7 @@ func CasbinAuth() gin.HandlerFunc {
 			return
 		}
 		// 获取用户申请的资源和方法
+		ctx.Set("user", user)
 		method := ctx.Request.Method
 		path := ctx.Request.URL.Path
 

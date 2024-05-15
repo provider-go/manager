@@ -38,6 +38,7 @@ func (s *Router) InitRouter(Router *gin.RouterGroup) {
 			HomeRouter.GET("menus", api.ListMenu)
 			HomeRouter.GET("menu", api.ViewMenu)
 			// 管理员接口
+			HomeRouter.GET("current/user", api.CurrentUser)
 			HomeRouter.POST("user", api.CreateUser)
 			HomeRouter.PUT("user", api.UpdateUser)
 			HomeRouter.DELETE("user", api.DeleteUser)

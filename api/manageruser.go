@@ -84,3 +84,13 @@ func ViewUser(ctx *gin.Context) {
 	}
 
 }
+
+func CurrentUser(ctx *gin.Context) {
+	row, err := models.ViewManagerUserByUsername(ctx.GetString("user"))
+	if err != nil {
+		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
+	} else {
+		output.ReturnSuccessResponse(ctx, row)
+	}
+
+}
