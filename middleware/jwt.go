@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/provider-go/pkg/logger"
 	"github.com/provider-go/pkg/util"
 	"time"
 )
@@ -53,8 +54,14 @@ func (i InstanceJWT) GenerateToken(username string) string {
 // CreateTokenByOldToken 使用旧token换新token
 func (i InstanceJWT) CreateTokenByOldToken(tokenString string) string {
 	claims := i.ParseToken(tokenString)
+	username, err := claims.GetSubject()
+	if err != nil {
+		logger.Error("CreateTokenByOldToken", "step", "GetSubject", "err", err)
+		return ""
+	}
+	newClaims := CreateClaims(username)
 	// 创建一个新的JWT token
-	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, newClaims)
 
 	// 设置签名并获取token字符串
 	token, err := jwtToken.SignedString(i.SecretKey)
