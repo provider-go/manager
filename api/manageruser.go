@@ -2,6 +2,8 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/provider-go/manager/global"
+	"github.com/provider-go/manager/middleware"
 	"github.com/provider-go/manager/models"
 	"github.com/provider-go/pkg/encryption/sm3"
 	"github.com/provider-go/pkg/logger"
@@ -146,6 +148,17 @@ func CurrentUser(ctx *gin.Context) {
 		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
 	} else {
 		output.ReturnSuccessResponse(ctx, row)
+	}
+
+}
+
+func RefreshToken(ctx *gin.Context) {
+	token := ctx.GetString("token")
+	newToken := middleware.InitJwt(global.SecretKey).CreateTokenByOldToken(token)
+	if len(newToken) > 10 {
+		output.ReturnSuccessResponse(ctx, newToken)
+	} else {
+		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
 	}
 
 }

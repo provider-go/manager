@@ -87,6 +87,8 @@ func CasbinAuth() gin.HandlerFunc {
 			ctx.Abort()
 			return
 		}
+		// token保存在ctx里
+		ctx.Set("token", token)
 		claims := InitJwt(global.SecretKey).ParseToken(token)
 		user, err := claims.GetSubject()
 		if err != nil {

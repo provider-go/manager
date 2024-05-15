@@ -39,6 +39,7 @@ func (s *Router) InitRouter(Router *gin.RouterGroup) {
 			HomeRouter.GET("menu", api.ViewMenu)
 			// 管理员接口
 			HomeRouter.GET("current/user", api.CurrentUser)
+			HomeRouter.PUT("current/refreshToken", api.RefreshToken)
 			HomeRouter.POST("user", api.CreateUser)
 			HomeRouter.PUT("user", api.UpdateUser)
 			HomeRouter.PUT("user/resetPassword", api.ResetPassword)
