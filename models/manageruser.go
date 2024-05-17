@@ -2,19 +2,19 @@ package models
 
 import (
 	"github.com/provider-go/manager/global"
-	"time"
+	"github.com/provider-go/pkg/types"
 )
 
 type ManagerUser struct {
-	Id         int32     `json:"id" gorm:"auto_increment;primary_key;comment:'主键'"`
-	Username   string    `json:"username" gorm:"column:username;type:varchar(50);not null;default:'';comment:登录用户名"`
-	Name       string    `json:"name" gorm:"column:name;type:varchar(20);not null;default:'';comment:用户名称"`
-	Password   string    `json:"password" gorm:"column:password;type:varchar(64);not null;default:'';comment:登录密码（加密）"`
-	Phone      string    `json:"phone" gorm:"column:phone;type:varchar(20);not null;default:'';comment:用户电话号码"`
-	Remark     string    `json:"remark" gorm:"column:remark;type:varchar(255);not null;comment:用户备注"`
-	Status     int       `json:"status" gorm:"column:status;type:tinyint(1);not null;default:0;comment:用户状态:0(正常)1(禁用)"`
-	CreateTime time.Time `json:"create_time" gorm:"autoCreateTime;comment:创建时间"`
-	UpdateTime time.Time `json:"update_time" gorm:"autoCreateTime;comment:更新时间"`
+	Id         int32      `json:"id" gorm:"auto_increment;primary_key;comment:'主键'"`
+	Username   string     `json:"username" gorm:"column:username;type:varchar(50);not null;default:'';comment:登录用户名"`
+	Name       string     `json:"name" gorm:"column:name;type:varchar(20);not null;default:'';comment:用户名称"`
+	Password   string     `json:"password" gorm:"column:password;type:varchar(64);not null;default:'';comment:登录密码（加密）"`
+	Phone      string     `json:"phone" gorm:"column:phone;type:varchar(20);not null;default:'';comment:用户电话号码"`
+	Remark     string     `json:"remark" gorm:"column:remark;type:varchar(255);not null;comment:用户备注"`
+	Status     int        `json:"status" gorm:"column:status;type:tinyint(1);not null;default:0;comment:用户状态:0(正常)1(禁用)"`
+	CreateTime types.Time `json:"create_time" gorm:"autoCreateTime;comment:创建时间"`
+	UpdateTime types.Time `json:"update_time" gorm:"autoCreateTime;comment:更新时间"`
 }
 
 func CreateManagerUser(username, name, password, phone, remark string) error {

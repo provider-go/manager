@@ -2,18 +2,18 @@ package models
 
 import (
 	"github.com/provider-go/manager/global"
-	"time"
+	"github.com/provider-go/pkg/types"
 )
 
 type ManagerRole struct {
-	Id          int32     `json:"id" gorm:"auto_increment;primary_key;comment:'主键'"`
-	Code        string    `json:"code" gorm:"column:code;type:varchar(20);not null;default:'';comment:角色编码"`
-	Name        string    `json:"name" gorm:"column:name;type:varchar(200);not null;default:'';comment:角色名称"`
-	Description string    `json:"description" gorm:"column:description;type:varchar(255);not null;comment:角色描述"`
-	Sequence    int       `json:"sequence" gorm:"column:sequence;type:tinyint(1);not null;default:0;comment:排序顺序（按desc排序）"`
-	Status      int       `json:"status" gorm:"column:status;type:tinyint(1);not null;default:0;comment:菜单状态:0(正常)1(禁用)"`
-	CreateTime  time.Time `json:"create_time" gorm:"autoCreateTime;comment:创建时间"`
-	UpdateTime  time.Time `json:"update_time" gorm:"autoCreateTime;comment:更新时间"`
+	Id          int32      `json:"id" gorm:"auto_increment;primary_key;comment:'主键'"`
+	Code        string     `json:"code" gorm:"column:code;type:varchar(20);not null;default:'';comment:角色编码"`
+	Name        string     `json:"name" gorm:"column:name;type:varchar(200);not null;default:'';comment:角色名称"`
+	Description string     `json:"description" gorm:"column:description;type:varchar(255);not null;comment:角色描述"`
+	Sequence    int        `json:"sequence" gorm:"column:sequence;type:tinyint(1);not null;default:0;comment:排序顺序（按desc排序）"`
+	Status      int        `json:"status" gorm:"column:status;type:tinyint(1);not null;default:0;comment:菜单状态:0(正常)1(禁用)"`
+	CreateTime  types.Time `json:"create_time" gorm:"autoCreateTime;comment:创建时间"`
+	UpdateTime  types.Time `json:"update_time" gorm:"autoCreateTime;comment:更新时间"`
 }
 
 func CreateManagerRole(code, name, description string) error {

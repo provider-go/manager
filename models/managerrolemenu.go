@@ -2,15 +2,15 @@ package models
 
 import (
 	"github.com/provider-go/manager/global"
-	"time"
+	"github.com/provider-go/pkg/types"
 )
 
 type ManagerRoleMenu struct {
-	Id         int32     `json:"id" gorm:"auto_increment;primary_key;comment:'主键'"`
-	RoleID     int32     `json:"roleId" gorm:"column:role_id;not null;default:0;comment:角色ID"`
-	MenuID     int32     `json:"menuId" gorm:"column:menu_id;not null;default:0;comment:菜单ID"`
-	CreateTime time.Time `json:"create_time" gorm:"autoCreateTime;comment:创建时间"`
-	UpdateTime time.Time `json:"update_time" gorm:"autoCreateTime;comment:更新时间"`
+	Id         int32      `json:"id" gorm:"auto_increment;primary_key;comment:'主键'"`
+	RoleID     int32      `json:"roleId" gorm:"column:role_id;not null;default:0;comment:角色ID"`
+	MenuID     int32      `json:"menuId" gorm:"column:menu_id;not null;default:0;comment:菜单ID"`
+	CreateTime types.Time `json:"create_time" gorm:"autoCreateTime;comment:创建时间"`
+	UpdateTime types.Time `json:"update_time" gorm:"autoCreateTime;comment:更新时间"`
 }
 
 func CreateManagerRoleMenu(roleId, menuId int32) error {

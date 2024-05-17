@@ -2,19 +2,19 @@ package models
 
 import (
 	"github.com/provider-go/manager/global"
-	"time"
+	"github.com/provider-go/pkg/types"
 )
 
 type ManagerLogger struct {
-	Id         int32     `json:"id" gorm:"auto_increment;primary_key;comment:'主键'"`
-	Level      string    `json:"level" gorm:"column:level;type:varchar(10);not null;default:'';comment:日志级别"`
-	TraceID    string    `json:"traceId" gorm:"column:trace_id;type:varchar(30);not null;default:'';comment:访问 ID"`
-	UserID     int32     `json:"userId" gorm:"column:user_id;not null;default:0;comment:用户ID"`
-	Tag        string    `json:"tag" gorm:"column:tag;type:varchar(20);not null;default:'';comment:标签"`
-	Message    string    `json:"message" gorm:"column:message;type:varchar(255);not null;comment:日志消息"`
-	Stack      string    `json:"stack" gorm:"column:stack;type:text;not null;comment:错误堆栈"`
-	Data       string    `json:"data" gorm:"column:data;type:text;not null;comment:日志数据"`
-	CreateTime time.Time `json:"create_time" gorm:"autoCreateTime;comment:创建时间"`
+	Id         int32      `json:"id" gorm:"auto_increment;primary_key;comment:'主键'"`
+	Level      string     `json:"level" gorm:"column:level;type:varchar(10);not null;default:'';comment:日志级别"`
+	TraceID    string     `json:"traceId" gorm:"column:trace_id;type:varchar(30);not null;default:'';comment:访问 ID"`
+	UserID     int32      `json:"userId" gorm:"column:user_id;not null;default:0;comment:用户ID"`
+	Tag        string     `json:"tag" gorm:"column:tag;type:varchar(20);not null;default:'';comment:标签"`
+	Message    string     `json:"message" gorm:"column:message;type:varchar(255);not null;comment:日志消息"`
+	Stack      string     `json:"stack" gorm:"column:stack;type:text;not null;comment:错误堆栈"`
+	Data       string     `json:"data" gorm:"column:data;type:text;not null;comment:日志数据"`
+	CreateTime types.Time `json:"create_time" gorm:"autoCreateTime;comment:创建时间"`
 }
 
 func CreateManagerLogger(level, traceId string, userId int32, tag, message, stack, data string) error {

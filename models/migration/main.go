@@ -17,7 +17,6 @@ func main() {
 	// 迁移 schema
 	err = DB.AutoMigrate(models.ManagerLogger{},
 		models.ManagerMenu{},
-		models.ManagerMenuResource{},
 		models.ManagerRole{},
 		models.ManagerRoleMenu{},
 		models.ManagerUser{},
