@@ -74,6 +74,19 @@ func ListMenu(ctx *gin.Context) {
 
 }
 
+func ListMenuByParentId(ctx *gin.Context) {
+	parentId := output.ParamToInt(ctx.Param("parentId"))
+
+	list, err := models.ListManagerMenuByParentId(parentId)
+
+	if err != nil {
+		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
+	} else {
+		output.ReturnSuccessResponse(ctx, list)
+	}
+
+}
+
 func ViewMenu(ctx *gin.Context) {
 	id := output.ParamToInt32(ctx.Query("id"))
 	row, err := models.ViewManagerMenu(id)

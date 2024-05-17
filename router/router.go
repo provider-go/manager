@@ -37,6 +37,7 @@ func (s *Router) InitRouter(Router *gin.RouterGroup) {
 			HomeRouter.DELETE("menu", api.DeleteMenu)
 			HomeRouter.GET("menus", api.ListMenu)
 			HomeRouter.GET("menu", api.ViewMenu)
+			HomeRouter.GET("menus/:parentId", api.ListMenuByParentId)
 			// 管理员接口
 			HomeRouter.GET("current/user", api.CurrentUser)
 			HomeRouter.PUT("current/refreshToken", api.RefreshToken)

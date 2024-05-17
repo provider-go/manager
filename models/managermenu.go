@@ -8,12 +8,12 @@ import (
 type ManagerMenu struct {
 	ID         int32      `json:"id" gorm:"auto_increment;primary_key;comment:'主键'"`
 	ParentID   int32      `json:"parentId" gorm:"column:parent_id;not null;default:0;comment:父ID"`
-	Type       string     `json:"type" gorm:"column:type;type:varchar(20);not null;default:'';comment:菜单类型（菜单、按钮）"`
+	Type       string     `json:"type" gorm:"column:type;type:varchar(20);not null;default:'';comment:菜单类型（menu、button）"`
 	Code       string     `json:"code" gorm:"column:code;type:varchar(20);not null;default:'';comment:菜单编码（每个级别唯一）"`
 	Name       string     `json:"name" gorm:"column:name;type:varchar(20);not null;default:'';comment:菜单显示名称"`
 	Path       string     `json:"path" gorm:"column:path;type:varchar(255);not null;comment:菜单的访问路径"`
-	Method     string     `json:"method" gorm:"column:method;type:varchar(20);not null;default:'';comment:HTTP方法"`
-	APIPath    string     `json:"apiPath" gorm:"column:api_path;type:varchar(255);not null;comment:接口请求地址"`
+	Method     string     `json:"method" gorm:"column:method;type:varchar(20);not null;default:'';comment:请求方法"`
+	APIPath    string     `json:"apiPath" gorm:"column:api_path;type:varchar(255);not null;comment:请求地址"`
 	Sequence   int        `json:"sequence" gorm:"column:sequence;type:tinyint(1);not null;default:0;comment:排序顺序（按desc排序）"`
 	Status     string     `json:"status" gorm:"column:status;type:varchar(10);not null;default:'';comment:菜单状态(enabled, disabled)"`
 	CreateTime types.Time `json:"create_time" gorm:"autoCreateTime;comment:创建时间"`
@@ -62,4 +62,13 @@ func ViewManagerMenu(id int32) (*ManagerMenu, error) {
 		return nil, err
 	}
 	return row, nil
+}
+
+func ListManagerMenuByParentId(parentId int) ([]*ManagerMenu, error) {
+	var rows []*ManagerMenu
+
+	if err := global.DB.Table("manager_menus").Where("parent_id = ?", parentId).Order("sequence desc").Find(&rows).Error; err != nil {
+		return nil, err
+	}
+	return rows, nil
 }
