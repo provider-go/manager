@@ -20,10 +20,10 @@ type ManagerMenu struct {
 	UpdateTime types.Time `json:"update_time" gorm:"autoCreateTime;comment:更新时间"`
 }
 
-func CreateManagerMenu(parentId int32, menuType, code, name, path, method, apiPath string) error {
+func CreateManagerMenu(parentId int32, menuType, code, name, path, method, apiPath, status string) error {
 	return global.DB.Table("manager_menus").
 		Create(&ManagerMenu{ParentID: parentId, Type: menuType, Code: code, Name: name, Path: path, Method: method,
-			APIPath: apiPath}).Error
+			APIPath: apiPath, Status: status}).Error
 }
 
 func DeleteManagerMenu(id int32) error {

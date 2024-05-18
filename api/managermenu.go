@@ -17,7 +17,8 @@ func CreateMenu(ctx *gin.Context) {
 	path := output.ParamToString(json["path"])
 	method := output.ParamToString(json["method"])
 	apiPath := output.ParamToString(json["apiPath"])
-	err := models.CreateManagerMenu(parentId, menuType, code, name, path, method, apiPath)
+	status := output.ParamToString(json["status"])
+	err := models.CreateManagerMenu(parentId, menuType, code, name, path, method, apiPath, status)
 	if err != nil {
 		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
 	} else {
