@@ -11,7 +11,7 @@ func CreateMenu(ctx *gin.Context) {
 	_ = ctx.BindJSON(&json)
 
 	parentId := output.ParamToInt32(json["parentId"])
-	menuType := output.ParamToString(json["menuType"])
+	menuType := output.ParamToString(json["type"])
 	code := output.ParamToString(json["code"])
 	name := output.ParamToString(json["name"])
 	path := output.ParamToString(json["path"])
@@ -30,7 +30,7 @@ func UpdateMenu(ctx *gin.Context) {
 	_ = ctx.BindJSON(&json)
 	id := output.ParamToInt32(json["id"])
 	parentId := output.ParamToInt32(json["parentId"])
-	menuType := output.ParamToString(json["menuType"])
+	menuType := output.ParamToString(json["type"])
 	code := output.ParamToString(json["code"])
 	name := output.ParamToString(json["name"])
 	path := output.ParamToString(json["path"])
