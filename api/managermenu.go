@@ -68,7 +68,7 @@ func ListMenu(ctx *gin.Context) {
 		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
 	} else {
 		res := make(map[string]interface{})
-		res["records"] = list
+		res["list"] = list
 		res["total"] = total
 		output.ReturnSuccessResponse(ctx, res)
 	}
@@ -83,7 +83,9 @@ func ListMenuByParentId(ctx *gin.Context) {
 	if err != nil {
 		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
 	} else {
-		output.ReturnSuccessResponse(ctx, list)
+		res := make(map[string]interface{})
+		res["list"] = list
+		output.ReturnSuccessResponse(ctx, res)
 	}
 
 }
