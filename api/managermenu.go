@@ -131,6 +131,7 @@ func changeMenuStruct(list []*models.ManagerMenu) ([]*AllManagerMenu, error) {
 				return nil, err
 			}
 		}
+		rows = append(rows, tmp)
 	}
 
 	return rows, nil
