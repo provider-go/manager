@@ -77,7 +77,7 @@ func ListMenu(ctx *gin.Context) {
 
 type AllManagerMenu struct {
 	models.ManagerMenu
-	Children []AllManagerMenu `json:"children"`
+	Children []*AllManagerMenu `json:"children"`
 }
 
 func ListAllMenu(ctx *gin.Context) {
@@ -100,8 +100,8 @@ func ListAllMenu(ctx *gin.Context) {
 }
 
 // changeMenuStruct 递归格式化菜单结构
-func changeMenuStruct(list []*models.ManagerMenu) ([]AllManagerMenu, error) {
-	var rows []AllManagerMenu
+func changeMenuStruct(list []*models.ManagerMenu) ([]*AllManagerMenu, error) {
+	var rows []*AllManagerMenu
 	for k, v := range list {
 		rows[k].ParentID = v.ID
 		rows[k].ParentID = v.ParentID
