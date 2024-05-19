@@ -103,7 +103,7 @@ func ListAllMenu(ctx *gin.Context) {
 func changeMenuStruct(list []*models.ManagerMenu) ([]*AllManagerMenu, error) {
 	var rows []*AllManagerMenu
 	for k, v := range list {
-		rows[k].ParentID = v.ID
+		rows[k].ID = v.ID
 		rows[k].ParentID = v.ParentID
 		rows[k].Type = v.Type
 		rows[k].Code = v.Code
