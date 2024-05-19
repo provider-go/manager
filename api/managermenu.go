@@ -76,8 +76,8 @@ func ListMenu(ctx *gin.Context) {
 }
 
 type AllManagerMenu struct {
-	models.ManagerMenu
-	Children []*AllManagerMenu `json:"children"`
+	Children           []*AllManagerMenu `json:"children"`
+	models.ManagerMenu                   // 匿名字段
 }
 
 func ListAllMenu(ctx *gin.Context) {
@@ -102,26 +102,31 @@ func ListAllMenu(ctx *gin.Context) {
 // changeMenuStruct 递归格式化菜单结构
 func changeMenuStruct(list []*models.ManagerMenu) ([]*AllManagerMenu, error) {
 	var rows []*AllManagerMenu
-	for k, v := range list {
-		rows[k].ID = v.ID
-		rows[k].ParentID = v.ParentID
-		rows[k].Type = v.Type
-		rows[k].Code = v.Code
-		rows[k].Name = v.Name
-		rows[k].Path = v.Path
-		rows[k].Method = v.Method
-		rows[k].APIPath = v.APIPath
-		rows[k].Sequence = v.Sequence
-		rows[k].Status = v.Status
-		rows[k].CreateTime = v.CreateTime
-		rows[k].UpdateTime = v.UpdateTime
+	for _, v := range list {
+		tmp := &AllManagerMenu{
+			Children: nil,
+			ManagerMenu: models.ManagerMenu{
+				ID:         v.ID,
+				ParentID:   v.ParentID,
+				Type:       v.Type,
+				Code:       v.Code,
+				Name:       v.Name,
+				Path:       v.Path,
+				Method:     v.Method,
+				APIPath:    v.APIPath,
+				Sequence:   v.Sequence,
+				Status:     v.Status,
+				CreateTime: v.CreateTime,
+				UpdateTime: v.UpdateTime,
+			},
+		}
 
 		items, err := models.ListManagerMenuByParentId(v.ID)
 		if err != nil {
 			return nil, err
 		}
 		if len(items) > 0 {
-			rows[k].Children, err = changeMenuStruct(items)
+			tmp.Children, err = changeMenuStruct(items)
 			if err != nil {
 				return nil, err
 			}
