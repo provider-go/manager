@@ -75,6 +75,11 @@ func ListMenu(ctx *gin.Context) {
 
 }
 
+type AllManagerMenu struct {
+	models.ManagerMenu
+	Children []AllManagerMenu `json:"children"`
+}
+
 func ListAllMenu(ctx *gin.Context) {
 	list, err := models.ListManagerMenuByParentId(0)
 
@@ -95,38 +100,35 @@ func ListAllMenu(ctx *gin.Context) {
 }
 
 // changeMenuStruct 递归格式化菜单结构
-func changeMenuStruct(list []*models.ManagerMenu) (map[int]interface{}, error) {
-	res := make(map[int]interface{})
+func changeMenuStruct(list []*models.ManagerMenu) ([]AllManagerMenu, error) {
+	var rows []AllManagerMenu
 	for k, v := range list {
-		tmp := make(map[string]interface{})
-		tmp["id"] = v.ID
-		tmp["parentId"] = v.ParentID
-		tmp["type"] = v.Type
-		tmp["code"] = v.Code
-		tmp["name"] = v.Name
-		tmp["path"] = v.Path
-		tmp["method"] = v.Method
-		tmp["apiPath"] = v.APIPath
-		tmp["sequence"] = v.Sequence
-		tmp["status"] = v.Status
-		tmp["create_time"] = v.CreateTime
+		rows[k].ParentID = v.ID
+		rows[k].ParentID = v.ParentID
+		rows[k].Type = v.Type
+		rows[k].Code = v.Code
+		rows[k].Name = v.Name
+		rows[k].Path = v.Path
+		rows[k].Method = v.Method
+		rows[k].APIPath = v.APIPath
+		rows[k].Sequence = v.Sequence
+		rows[k].Status = v.Status
+		rows[k].CreateTime = v.CreateTime
+		rows[k].UpdateTime = v.UpdateTime
 
 		items, err := models.ListManagerMenuByParentId(v.ID)
 		if err != nil {
 			return nil, err
 		}
 		if len(items) > 0 {
-			tmp["children"], err = changeMenuStruct(items)
+			rows[k].Children, err = changeMenuStruct(items)
 			if err != nil {
 				return nil, err
 			}
 		}
-
-		res[k] = tmp
-		continue
 	}
 
-	return res, nil
+	return rows, nil
 }
 
 func ViewMenu(ctx *gin.Context) {
