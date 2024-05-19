@@ -111,17 +111,19 @@ func changeMenuStruct(list []*models.ManagerMenu) (map[int]interface{}, error) {
 		tmp["status"] = v.Status
 		tmp["create_time"] = v.CreateTime
 
-		items, err := models.ListManagerMenuByParentId(output.ParamToInt(tmp["id"]))
+		items, err := models.ListManagerMenuByParentId(v.ID)
 		if err != nil {
 			return nil, err
 		}
 		if len(items) > 0 {
 			tmp["children"], err = changeMenuStruct(items)
+			if err != nil {
+				return nil, err
+			}
 		}
-		if err != nil {
-			return nil, err
-		}
+
 		res[k] = tmp
+		continue
 	}
 
 	return res, nil

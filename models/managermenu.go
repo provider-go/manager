@@ -64,7 +64,7 @@ func ViewManagerMenu(id int32) (*ManagerMenu, error) {
 	return row, nil
 }
 
-func ListManagerMenuByParentId(parentId int) ([]*ManagerMenu, error) {
+func ListManagerMenuByParentId(parentId int32) ([]*ManagerMenu, error) {
 	var rows []*ManagerMenu
 
 	if err := global.DB.Table("manager_menus").Where("parent_id = ?", parentId).Order("sequence desc").Find(&rows).Error; err != nil {
