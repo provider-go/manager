@@ -75,19 +75,56 @@ func ListMenu(ctx *gin.Context) {
 
 }
 
-func ListMenuByParentId(ctx *gin.Context) {
-	parentId := output.ParamToInt(ctx.Param("parentId"))
-
-	list, err := models.ListManagerMenuByParentId(parentId)
+func ListAllMenu(ctx *gin.Context) {
+	list, err := models.ListManagerMenuByParentId(0)
 
 	if err != nil {
 		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
-	} else {
-		res := make(map[string]interface{})
-		res["list"] = list
-		output.ReturnSuccessResponse(ctx, res)
+		return
 	}
 
+	items, err := changeMenuStruct(list)
+	if err != nil {
+		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
+		return
+	}
+	res := make(map[string]interface{})
+	res["list"] = items
+	output.ReturnSuccessResponse(ctx, res)
+
+}
+
+// changeMenuStruct 递归格式化菜单结构
+func changeMenuStruct(list []*models.ManagerMenu) (map[int]interface{}, error) {
+	res := make(map[int]interface{})
+	for k, v := range list {
+		tmp := make(map[string]interface{})
+		tmp["id"] = v.ID
+		tmp["parentId"] = v.ParentID
+		tmp["type"] = v.Type
+		tmp["code"] = v.Code
+		tmp["name"] = v.Name
+		tmp["path"] = v.Path
+		tmp["method"] = v.Method
+		tmp["apiPath"] = v.APIPath
+		tmp["sequence"] = v.Sequence
+		tmp["status"] = v.Status
+		tmp["create_time"] = v.CreateTime
+
+		items, err := models.ListManagerMenuByParentId(output.ParamToInt(tmp["id"]))
+		if err != nil {
+			return nil, err
+		}
+		if len(items) > 0 {
+			tmp["children"], err = changeMenuStruct(items)
+		}
+		if err != nil {
+			return nil, err
+		}
+		res[k] = tmp
+	}
+
+	return res, nil
 }
 
 func ViewMenu(ctx *gin.Context) {
