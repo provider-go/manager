@@ -7,6 +7,8 @@ import (
 
 type ManagerUser struct {
 	Id         int32      `json:"id" gorm:"auto_increment;primary_key;comment:'主键'"`
+	DID        string     `json:"did" gorm:"column:did;type:varchar(50);not null;default:'';comment:用户did"`
+	PubKey     string     `json:"pubkey" gorm:"column:pubkey;type:varchar(100);not null;default:'';comment:用户公钥"`
 	Username   string     `json:"username" gorm:"column:username;type:varchar(50);not null;default:'';comment:登录用户名"`
 	Name       string     `json:"name" gorm:"column:name;type:varchar(20);not null;default:'';comment:用户名称"`
 	Password   string     `json:"password" gorm:"column:password;type:varchar(64);not null;default:'';comment:登录密码（加密）"`
