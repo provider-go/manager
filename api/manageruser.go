@@ -5,7 +5,7 @@ import (
 	"github.com/provider-go/manager/global"
 	"github.com/provider-go/manager/middleware"
 	"github.com/provider-go/manager/models"
-	"github.com/provider-go/pkg/encryption/sm3"
+	"github.com/provider-go/pkg/encryption"
 	"github.com/provider-go/pkg/logger"
 	"github.com/provider-go/pkg/output"
 	"github.com/provider-go/pkg/util"
@@ -18,9 +18,8 @@ func CreateUser(ctx *gin.Context) {
 	username := output.ParamToString(json["username"])
 	name := output.ParamToString(json["name"])
 	password := output.ParamToString(json["password"])
-	// 对password进行双hash
-	ripemd := sm3.NewSMThree("ripemd160")
-	passwordHash := ripemd.Hash([]byte(password))
+	// 对password进行sm3 hash
+	passwordHash := encryption.SM3Hash(password)
 	phone := output.ParamToString(json["phone"])
 	remark := output.ParamToString(json["remark"])
 	err := models.CreateManagerUser(username, name, passwordHash, phone, remark)
@@ -38,9 +37,8 @@ func UpdateUser(ctx *gin.Context) {
 	username := output.ParamToString(json["username"])
 	name := output.ParamToString(json["name"])
 	password := output.ParamToString(json["password"])
-	// 对password进行双hash
-	ripemd := sm3.NewSMThree("ripemd160")
-	passwordHash := ripemd.Hash([]byte(password))
+	// 对password进行sm3 hash
+	passwordHash := encryption.SM3Hash(password)
 	phone := output.ParamToString(json["phone"])
 	remark := output.ParamToString(json["remark"])
 	status := output.ParamToString(json["status"])
@@ -59,9 +57,8 @@ func ResetPassword(ctx *gin.Context) {
 	id := output.ParamToInt32(json["id"])
 	// 生成10位随机密码
 	password := util.GetRandString(10)
-	// 对password进行双hash
-	ripemd := sm3.NewSMThree("ripemd160")
-	passwordHash := ripemd.Hash([]byte(password))
+	// 对password进行sm3 hash
+	passwordHash := encryption.SM3Hash(password)
 	err := models.UpdatePasswordManagerUser(id, passwordHash)
 	if err != nil {
 		output.ReturnErrorResponse(ctx, 9999, "系统错误~")
@@ -77,11 +74,9 @@ func ModifyPassword(ctx *gin.Context) {
 	id := output.ParamToInt32(json["id"])
 	newPassword := output.ParamToString(json["newPassword"])
 	oldPassword := output.ParamToString(json["oldPassword"])
-	// 对password进行双hash
-	ripemd := sm3.NewSMThree("ripemd160")
-	newPasswordHash := ripemd.Hash([]byte(newPassword))
-	ripemd = sm3.NewSMThree("ripemd160")
-	oldPasswordHash := ripemd.Hash([]byte(oldPassword))
+	// 对password进行sm3 hash
+	newPasswordHash := encryption.SM3Hash(newPassword)
+	oldPasswordHash := encryption.SM3Hash(oldPassword)
 	// 查询旧密码是否匹配
 	item, err := models.ViewManagerUserById(id)
 	if err != nil {

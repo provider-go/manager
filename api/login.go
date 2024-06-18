@@ -5,7 +5,7 @@ import (
 	"github.com/provider-go/manager/global"
 	"github.com/provider-go/manager/middleware"
 	"github.com/provider-go/manager/models"
-	"github.com/provider-go/pkg/encryption/sm3"
+	"github.com/provider-go/pkg/encryption"
 	"github.com/provider-go/pkg/logger"
 	"github.com/provider-go/pkg/output"
 )
@@ -16,8 +16,7 @@ func LoginByUsername(ctx *gin.Context) {
 	username := output.ParamToString(json["username"])
 	password := output.ParamToString(json["password"])
 	// 对password进行双hash
-	ripemd := sm3.NewSMThree("ripemd160")
-	passwordHash := ripemd.Hash([]byte(password))
+	passwordHash := encryption.SM3Hash(password)
 	// 对比数据库记录
 	item, err := models.ViewManagerUserByUsername(username)
 	if err != nil {
