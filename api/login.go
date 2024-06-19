@@ -73,7 +73,7 @@ func LoginByPlugin(ctx *gin.Context) {
 	pluginToken := output.ParamToString(json["pluginToken"])
 	claims := middleware.InitJwt(global.SecretKey).ParseToken(pluginToken)
 	did, err := claims.GetSubject()
-	if err != nil {
+	if err != nil || len(did) < 2 {
 		logger.Error("LoginByPlugin", "step", "GetSubject", "err", err)
 		output.ReturnErrorResponse(ctx, 9999, "token解析错误~")
 		return
