@@ -1,8 +1,10 @@
 package models
 
 import (
+	"errors"
 	"github.com/provider-go/manager/global"
 	"github.com/provider-go/pkg/types"
+	"gorm.io/gorm"
 )
 
 type ManagerUser struct {
@@ -60,6 +62,10 @@ func ListManagerUser(pageSize, pageNum int) ([]*ManagerUser, int64, error) {
 func ViewManagerUserById(id int32) (*ManagerUser, error) {
 	row := new(ManagerUser)
 	if err := global.DB.Table("manager_users").Where("id = ?", id).First(&row).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// 记录不存在的逻辑处理
+			return nil, errors.New("ErrRecordNotFound")
+		}
 		return nil, err
 	}
 	return row, nil
@@ -68,6 +74,10 @@ func ViewManagerUserById(id int32) (*ManagerUser, error) {
 func ViewManagerUserByUsername(username string) (*ManagerUser, error) {
 	row := new(ManagerUser)
 	if err := global.DB.Table("manager_users").Where("username = ?", username).First(&row).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// 记录不存在的逻辑处理
+			return nil, errors.New("ErrRecordNotFound")
+		}
 		return nil, err
 	}
 	return row, nil
@@ -76,6 +86,22 @@ func ViewManagerUserByUsername(username string) (*ManagerUser, error) {
 func ViewManagerUserByPhone(phone string) (*ManagerUser, error) {
 	row := new(ManagerUser)
 	if err := global.DB.Table("manager_users").Where("phone = ?", phone).First(&row).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// 记录不存在的逻辑处理
+			return nil, errors.New("ErrRecordNotFound")
+		}
+		return nil, err
+	}
+	return row, nil
+}
+
+func ViewManagerUserByPlugin(did string) (*ManagerUser, error) {
+	row := new(ManagerUser)
+	if err := global.DB.Table("manager_users").Where("did = ?", did).First(&row).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// 记录不存在的逻辑处理
+			return nil, errors.New("ErrRecordNotFound")
+		}
 		return nil, err
 	}
 	return row, nil

@@ -21,6 +21,7 @@ func (s *Router) InitRouter(Router *gin.RouterGroup) {
 			// 登录接口
 			LoginRouter.POST("loginByUsername", api.LoginByUsername)
 			LoginRouter.POST("loginByPhone", api.LoginByPhone)
+			LoginRouter.POST("loginByPlugin", api.LoginByPlugin)
 		}
 
 		HomeRouter := Router.Group("home").Use(middleware.CasbinAuth())
